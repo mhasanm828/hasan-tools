@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Husan Word Counter</title>
+  <link rel="icon" href="https://edge.gov.bd/wp-content/themes/edgewebsite/images/logo_footer.png" />
+  <meta name="description" content="Multilingual word and character counter with advanced formatting tools." />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    body { background: #f5f5f5; font-family: 'Segoe UI', sans-serif; }
+    .stats-box { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    .toolbar { background: #fff; border-radius: 12px; padding: 10px; margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    .toolbar button { border: none; background: none; position: relative; }
+    .toolbar i { font-size: 20px; color: #333; transition: 0.3s; }
+    .toolbar button:hover i { color: #0d6efd; transform: scale(1.2); }
+    .toolbar button::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: -28px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      color: #fff;
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 5px;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.3s;
+      white-space: nowrap;
+    }
+    .toolbar button:hover::after { opacity: 1; }
+    textarea { width: 100%; height: 200px; padding: 15px; resize: vertical; border-radius: 12px; border: 1px solid #ccc; }
+    .lang-list li { background: #fff; border: none; border-bottom: 1px solid #eee; }
+  </style>
+</head>
+<body>
+  <div class="container my-4">
+    <div class="text-center mb-4">
+      <h1 class="fw-bold">Husan Word Counter</h1>
+      <p class="text-muted">Multilingual Smart Text Stats — Instant Insights</p>
+    </div>
+
+    <!-- Stats Box -->
+    <div class="stats-box mb-4 row text-center">
+      <div class="col-6 col-md-2"><strong>Words</strong><div id="wordCount">0</div></div>
+      <div class="col-6 col-md-2"><strong>Characters</strong><div id="charCount">0</div></div>
+      <div class="col-6 col-md-2"><strong>Sentences</strong><div id="sentenceCount">0</div></div>
+      <div class="col-6 col-md-2"><strong>Paragraphs</strong><div id="paraCount">0</div></div>
+      <div class="col-6 col-md-2"><strong>Reading</strong><div id="readTime">0 min</div></div>
+      <div class="col-6 col-md-2"><strong>Speaking</strong><div id="speakTime">0 min</div></div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <button onclick="toggleSpellCheck()" data-tooltip="Grammar & Spell Check"><i class="fas fa-spell-check"></i></button>
+      <button onclick="convertCase('upper')" data-tooltip="UPPERCASE"><i class="fas fa-text-height"></i></button>
+      <button onclick="convertCase('lower')" data-tooltip="lowercase"><i class="fas fa-text-width"></i></button>
+      <button onclick="convertCase('title')" data-tooltip="Title Case"><i class="fas fa-heading"></i></button>
+      <button onclick="saveText()" data-tooltip="Save Text"><i class="fas fa-save"></i></button>
+      <button onclick="clearText()" data-tooltip="Clear Text"><i class="fas fa-eraser"></i></button>
+      <button onclick="undoText()" data-tooltip="Undo"><i class="fas fa-undo"></i></button>
+      <button onclick="redoText()" data-tooltip="Redo"><i class="fas fa-redo"></i></button>
+    </div>
+
+    <!-- Editor -->
+    <div class="my-3">
+      <textarea id="editor" oninput="updateStats()" placeholder="Start typing here..."></textarea>
+    </div>
+
+    <!-- Languages -->
+    <div class="card p-3 mt-4">
+      <h5 class="mb-3">Supported Languages</h5>
+      <ul class="list-group lang-list">
+        <li class="list-group-item">English</li>
+        <li class="list-group-item">বাংলা (Bangla)</li>
+        <li class="list-group-item">हिंदी (Hindi)</li>
+        <li class="list-group-item">Español (Spanish)</li>
+        <li class="list-group-item">اردو (Urdu)</li>
+        <li class="list-group-item">Français (French)</li>
+        <li class="list-group-item">Deutsch (German)</li>
+        <li class="list-group-item">中文 (Chinese)</li>
+        <li class="list-group-item">日本語 (Japanese)</li>
+        <li class="list-group-item">Русский (Russian)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Script Logic (same as before) -->
+  <script>
+    let undoStack = [], redoStack = [];
+
+    function updateStats() {
+      const text = document.getElementById("editor").value;
+      const words = text.match(/\b\w+\b/g) || [];
+      const chars = text.length;
+      const sentences = text.match(/[^.!?]+[.!?]/g) || [];
+      const paragraphs = text.split(/\n+/).filter(p => p.trim() !== "");
+      document.getElementById("wordCount").textContent = words.length;
+      document.getElementById("charCount").textContent = chars;
+      document.getElementById("sentenceCount").textContent = sentences.length;
+      document.getElementById("paraCount").textContent = paragraphs.length;
+      document.getElementById("readTime").textContent = `${Math.ceil(words.length / 200)} min`;
+      document.getElementById("speakTime").textContent = `${Math.ceil(words.length / 130)} min`;
+      saveUndoState(text);
+    }
+
+    function clearText() {
+      document.getElementById("editor").value = "";
+      updateStats();
+    }
+
+    function saveText() {
+      const text = document.getElementById("editor").value;
+      localStorage.setItem("savedText", text);
+      alert("Text saved locally.");
+    }
+
+    function convertCase(type) {
+      const editor = document.getElementById("editor");
+      let text = editor.value;
+      if (type === "upper") text = text.toUpperCase();
+      else if (type === "lower") text = text.toLowerCase();
+      else if (type === "title") text = text.replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
+      editor.value = text;
+      updateStats();
+    }
+
+    function toggleSpellCheck() {
+      const editor = document.getElementById("editor");
+      editor.spellcheck = !editor.spellcheck;
+      alert("Spell check " + (editor.spellcheck ? "enabled" : "disabled"));
+    }
+
+    function saveUndoState(text) {
+      if (undoStack.length === 0 || undoStack[undoStack.length - 1] !== text) {
+        undoStack.push(text);
+        redoStack = [];
+      }
+    }
+
+    function undoText() {
+      if (undoStack.length > 1) {
+        const current = undoStack.pop();
+        redoStack.push(current);
+        document.getElementById("editor").value = undoStack[undoStack.length - 1];
+        updateStats();
+      }
+    }
+
+    function redoText() {
+      if (redoStack.length > 0) {
+        const redo = redoStack.pop();
+        document.getElementById("editor").value = redo;
+        updateStats();
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const saved = localStorage.getItem("savedText");
+      if (saved) {
+        document.getElementById("editor").value = saved;
+        updateStats();
+      }
+    });
+  </script>
+</body>
+</html>
+
