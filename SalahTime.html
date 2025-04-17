@@ -1,0 +1,291 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Namaj Time Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            margin-top: 50px;
+        }
+       h1 {
+            color: #007bff;
+        }
+
+        select, input, button {
+            margin-top: 10px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        #prayerTimes {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+
+        p {
+            font-size: 18px;
+            margin: 10px 0;
+            color: #343a40;
+        }
+
+        #timer {
+            font-size: 30px;
+            margin-top: 10px;
+            color: black;
+            background:gray;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Namaj Time</h1>
+    
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card text-center">
+        <div class="card- body">
+          <h2> Now Time </h2>
+          <h2 class="card-title" id="digital-clock"></h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+    <div>
+        <label for="districtSelect">Select District:</label>
+        <select id="districtSelect" class="form-select">
+            
+            <!-- Add options for each district -->
+            <option value="Bagerhat">Bagerhat</option>
+        <option value="Bandarban">Bandarban</option>
+        <option value="Barguna">Barguna</option>
+        <option value="Barisal">Barisal</option>
+        <option value="Bhola">Bhola</option>
+        <option value="Bogra">Bogra</option>
+        <option value="Brahmanbaria">Brahmanbaria</option>
+        <option value="Chandpur">Chandpur</option>
+        <option value="Chittagong">Chittagong</option>
+        <option value="Chuadanga">Chuadanga</option>
+        <option value="Comilla">Comilla</option>
+        <option value="Cox'sBazar">Cox'sBazar</option>
+        <option value="Dhaka">Dhaka</option>
+        <option value="Dinajpur">Dinajpur</option>
+        <option value="Faridpur">Faridpur</option>
+        <option value="Feni">Feni</option>
+        <option value="Gaibandha">Gaibandha</option>
+        <option value="Gazipur">Gazipur</option>
+        <option value="Gopalganj">Gopalganj</option>
+        <option value="Habiganj">Habiganj</option>
+        <option value="Jaipurhat">Jaipurhat</option>
+        <option value="Jamalpur">Jamalpur</option>
+        <option value="Jessore">Jessore</option>
+        <option value="Jhalokati">Jhalokati</option>
+        <option value="Jhenaidah">Jhenaidah</option>
+        <option value="Khagrachari">Khagrachari</option>
+        <option value="Khulna">Khulna</option>
+        <option value="Kishoreganj">Kishoreganj</option>
+        <option value="Kurigram">Kurigram</option>
+        <option value="Kushtia">Kushtia</option>
+        <option value="Lakshmipur">Lakshmipur</option>
+        <option value="Lalmonirhat">Lalmonirhat</option>
+        <option value="Madaripur">Madaripur</option>
+        <option value="Magura">Magura</option>
+        <option value="Manikganj">Manikganj</option>
+        <option value="Maulvibazar">Maulvibazar</option>
+        <option value="Meherpur">Meherpur</option>
+        <option value="Munshiganj">Munshiganj</option>
+        <option value="Mymensingh">Mymensingh</option>
+        <option value="Naogaon">Naogaon</option>
+        <option value="Narail">Narail</option>
+        <option value="Narayanganj">Narayanganj</option>
+        <option value="Narsingdi">Narsingdi</option>
+        <option value="Natore">Natore</option>
+        <option value="Nawabganj">Nawabganj</option>
+        <option value="Netrokona">Netrokona</option>
+        <option value="Nilphamari">Nilphamari</option>
+        <option value="Noakhali">Noakhali</option>
+        <option value="Pabna">Pabna</option>
+        <option value="Panchagarh">Panchagarh</option>
+        <option value="Patuakhali">Patuakhali</option>
+        <option value="Pirojpur">Pirojpur</option>
+        <option value="Rajbari">Rajbari</option>
+        <option value="Rajshahi">Rajshahi</option>
+        <option value="Rangamati">Rangamati</option>
+        <option value="Rangpur">Rangpur</option>
+        <option value="Satkhira">Satkhira</option>
+        <option value="Shariatpur">Shariatpur</option>
+        <option value="Sherpur">Sherpur</option>
+        <option value="Sirajganj">Sirajganj</option>
+        <option value="Sunamganj">Sunamganj</option>
+        <option value="Sylhet">Sylhet</option>
+        <option value="Tangail">Tangail</option>
+        <option value="Thakurgaon">Thakurgaon</option>
+            <!-- Add the rest of the districts -->
+            <!-- ... -->
+        </select>
+    </div>
+    
+    <div>
+        <!---label for="countryInput">Country:</label--->
+        <input  style=" display: none; " type="text" id="countryInput" class="form-control" value="Bangladesh" readonly>
+    </div>
+
+    <button onclick="fetchPrayerTimes()" class="btn btn-primary">Get Prayer Times</button>
+    
+    <div id="prayerTimes"></div>
+    
+    <div id="timer"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let countdownInterval;
+
+    function fetchPrayerTimes() {
+        const district = document.getElementById('districtSelect').value;
+        const country = document.getElementById('countryInput').value;
+
+        if (!district) {
+            alert('Please select a district.');
+            return;
+        }
+
+        const apiUrl = `https://api.aladhan.com/v1/timingsByCity?city=${district}&country=${country}&method=2`;
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                const timings = data.data.timings;
+                displayPrayerTimes(timings);
+                startCountdown(timings);
+            })
+            .catch(error => {
+                console.error('Error fetching prayer times:', error);
+            });
+    }
+
+    function format12Hour(time) {
+        // Convert 24-hour format to 12-hour format
+        const [hours, minutes] = time.split(':');
+        const period = hours >= 12 ? 'PM' : 'AM';
+        const formattedHours = (hours % 12) || 12;
+        return `${formattedHours}:${minutes} ${period}`;
+    }
+
+    function displayPrayerTimes(timings) {
+        const prayerTimesContainer = document.getElementById('prayerTimes');
+
+        // Customize the display format based on the API response
+        const timesHTML = `
+            <p><strong>Fajr:</strong> ${format12Hour(timings.Fajr)}</p>
+            <p><strong>Dhuhr:</strong> ${format12Hour(timings.Dhuhr)}</p>
+            <p><strong>Asr:</strong> ${format12Hour(timings.Asr)}</p>
+            <p><strong>Maghrib:</strong> ${format12Hour(timings.Maghrib)}</p>
+            <p><strong>Isha:</strong> ${format12Hour(timings.Isha)}</p>
+        `;
+
+        prayerTimesContainer.innerHTML = timesHTML;
+    }
+
+    function startCountdown(timings) {
+        clearInterval(countdownInterval);
+
+        const currentTime = new Date();
+        const nextPrayerTime = getNextPrayerTime(currentTime, timings);
+        updateTimer(nextPrayerTime);
+
+        countdownInterval = setInterval(() => {
+            const remainingTime = calculateRemainingTime(currentTime, nextPrayerTime);
+            updateTimer(remainingTime);
+
+            if (remainingTime <= 0) {
+                clearInterval(countdownInterval);
+                fetchPrayerTimes(); // Refresh prayer times after the next prayer
+            }
+        }, 1000);
+    }
+
+    function getNextPrayerTime(currentTime, timings) {
+        const prayerTimes = Object.values(timings);
+        const formattedPrayerTimes = prayerTimes.map(time => {
+            const [hours, minutes] = time.split(':');
+            return new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate(), hours, minutes);
+        });
+
+        for (const prayerTime of formattedPrayerTimes) {
+            if (prayerTime > currentTime) {
+                return prayerTime;
+            }
+        }
+
+        return formattedPrayerTimes[0]; // If all prayers have passed, next prayer is Fajr of the next day
+    }
+
+    function calculateRemainingTime(currentTime, endTime) {
+        return Math.floor((endTime - currentTime) / 1000);
+    }
+
+    function updateTimer(time) {
+        const timerElement = document.getElementById('timer');
+        const hours = Math.floor(time / 3600);
+        const minutes = Math.floor((time % 3600) / 60);
+        const seconds = time % 60;
+        timerElement.innerHTML = ` Next Prayer  : ${formatTimeComponent(hours)} Hours :${formatTimeComponent(minutes)} Minutes  `;
+    }
+
+    function formatTimeComponent(component) {
+        return component < 10 ? `0${component}` : component;
+    }
+</script>
+
+<script>
+  // Function to update the digital clock in 12-hour dddddddddddddddddddddddddddddddc
+  function updateClock() {
+    const now = new Date();
+    let hours = now.getHours();
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2, '0');
+    const meridiem = hours >= 12 ? 'PM' : 'AM';
+
+    // Convert to 12-hour format
+    hours = hours % 12 || 12;
+
+    const digitalClock = document.getElementById('digital-clock');
+    digitalClock.textContent = `${hours}:${minutes}:${seconds} ${meridiem}`;
+  }
+
+  // Update the clock every second
+  setInterval(updateClock, 1000);
+
+  // Initial call to display the clock immediately
+  updateClock();
+</script>
+
+
+</body>
+          </html>
+  
