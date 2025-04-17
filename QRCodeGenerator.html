@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Husan QR Code Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-bg: #0f172a;
+      --box-bg: #1e293b;
+      --text-light: #e2e8f0;
+      --accent: #38bdf8;
+      --border: #334155;
+      --radius: 12px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      background-color: var(--primary-bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .box {
+      background: var(--box-bg);
+      padding: 30px;
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    .qr-header h1 {
+      color: var(--accent);
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 20px;
+      animation: slideDown 0.8s ease-in-out;
+    }
+
+    .qr-header label,
+    .qr-header input,
+    .qr-header select {
+      width: 100%;
+      margin-bottom: 16px;
+    }
+
+    .qr-header label {
+      color: var(--text-light);
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .qr-header input,
+    .qr-header select {
+      padding: 12px;
+      font-size: 16px;
+      background: #0f172a;
+      border: 2px solid var(--border);
+      color: var(--text-light);
+      border-radius: var(--radius);
+      transition: border 0.3s ease;
+    }
+
+    .qr-header input:focus,
+    .qr-header select:focus {
+      border-color: var(--accent);
+      outline: none;
+    }
+
+    .qr-body {
+      display: grid;
+      place-items: center;
+      margin: 20px 0;
+      min-height: 200px;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    .qr-body img {
+      max-width: 100%;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px;
+      background: #fff;
+    }
+
+    .qr-footer {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .qr-footer a {
+      background: var(--accent);
+      color: #000;
+      padding: 12px 24px;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: var(--radius);
+      transition: transform 0.2s ease, background 0.3s;
+    }
+
+    .qr-footer a:hover {
+      transform: translateY(-2px);
+      background: #0ea5e9;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    @keyframes slideDown {
+      from {opacity: 0; transform: translateY(-20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    @media screen and (max-width: 480px) {
+      .qr-footer a {
+        padding: 10px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="qr-header">
+      <h1>Husan QR Code Generator</h1>
+      <input type="text" placeholder="Type your text or URL" id="qr-text" />
+      <label for="sizes">Select Size:</label>
+      <select id="sizes">
+        <option value="200">200x200</option>
+        <option value="300">300x300</option>
+        <option value="400">400x400</option>
+        <option value="500">500x500</option>
+        <option value="600">600x600</option>
+      </select>
+    </div>
+    <div class="qr-body"></div>
+    <div class="qr-footer">
+      <a href="#" id="generateBtn">Generate</a>
+      <a href="#" id="downloadBtn" download="Husan_QR_Code.png">Download</a>
+    </div>
+  </div>
+
+  <!-- QR Code JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    const qrText = document.getElementById('qr-text');
+    const sizes = document.getElementById('sizes');
+    const generateBtn = document.getElementById('generateBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const qrContainer = document.querySelector('.qr-body');
+
+    let size = sizes.value;
+
+    generateBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      qrText.value.trim().length > 0 ? generateQRCode() : alert("Please enter some text or URL!");
+    });
+
+    sizes.addEventListener('change', (e) => {
+      size = e.target.value;
+      if (qrText.value.trim().length > 0) {
+        generateQRCode();
+      }
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      const img = document.querySelector('.qr-body img');
+      const canvas = document.querySelector('canvas');
+      if (img) {
+        downloadBtn.href = img.src;
+      } else if (canvas) {
+        downloadBtn.href = canvas.toDataURL();
+      }
+    });
+
+    function generateQRCode() {
+      qrContainer.innerHTML = "";
+      new QRCode(qrContainer, {
+        text: qrText.value,
+        width: size,
+        height: size,
+        colorDark: "#000000",
+        colorLight: "#ffffff"
+      });
+    }
+  </script>
+</body>
+</html>
