@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Husan Age Calculator</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+  <!-- Animation Style -->
+  <style>
+    body {
+      background-color: #f4f4f4;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .container {
+      background-color: #ffffff;
+      border-radius: 16px;
+      padding: 30px;
+      margin-top: 40px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+      animation: fadeInUp 1s ease-out;
+    }
+
+    h1, h2, h3 {
+      color: #343a40;
+    }
+
+    .btn-primary {
+      background-color: #007BFF;
+      border-color: #007BFF;
+      transition: 0.3s;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+
+    .result {
+      font-size: 1.2rem;
+      color: #333;
+    }
+
+    .nextbirthday {
+      background-color: #eef;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: 50px;
+      background: #e9ecef;
+      font-weight: 500;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1 class="text-center mb-4">🧮 Husan Age Calculator</h1>
+    
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label for="birthDate" class="form-label">Enter Your Birthdate:</label>
+        <input type="date" class="form-control" id="birthDate" />
+      </div>
+      <div class="col-md-6">
+        <label for="currentDate" class="form-label">Enter Current Date:</label>
+        <input type="date" class="form-control" id="currentDate" />
+      </div>
+    </div>
+
+    <div class="text-center mt-4">
+      <button class="btn btn-primary px-5" id="calculateAge">Calculate</button>
+    </div>
+
+    <div id="result" class="result mt-4 text-center">
+      <h2 class="mt-4" id="ageYears"></h2>
+      <p id="ageMonths"></p>
+      <p id="ageDays"></p>
+      <div id="nextBirthday" class="nextbirthday"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    Made by <a href="https://api.whatsapp.com/send/?phone=8801723477809" target="_blank" style="color: #f02; text-decoration: none;">Hasan</a> |
+    <a href="https://hasan-tools.vercel.app/" target="_blank" style="color: #f02; text-decoration: none;">Visit Tools Page</a>
+  </footer>
+
+  <script>
+    document.getElementById("calculateAge").addEventListener("click", calculateAge);
+
+    function calculateAge() {
+      const birthDate = new Date(document.getElementById("birthDate").value);
+      const currentDate = new Date(document.getElementById("currentDate").value);
+
+      if (!birthDate || !currentDate || birthDate > currentDate) {
+        document.getElementById("result").innerHTML = `<p class="text-danger">Please enter valid dates.</p>`;
+        return;
+      }
+
+      const ageInMilliseconds = currentDate - birthDate;
+      const ageDate = new Date(ageInMilliseconds);
+
+      const years = ageDate.getUTCFullYear() - 1970;
+      const months = ageDate.getUTCMonth();
+      const days = ageDate.getUTCDate() - 1;
+
+      document.getElementById("ageYears").innerHTML = `<span class="badge bg-danger fs-4 text-white">🎂 Your Age</span><br><b>${years}</b> Years`;
+      document.getElementById("ageMonths").innerHTML = `<b>${months}</b> Months`;
+      document.getElementById("ageDays").innerHTML = `and <b>${days}</b> Days`;
+
+      // Calculate next birthday
+      const nextBirthday = new Date(currentDate.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+      if (nextBirthday < currentDate) {
+        nextBirthday.setFullYear(currentDate.getFullYear() + 1);
+      }
+
+      const options = { month: 'long', day: 'numeric' };
+      const birthdayString = nextBirthday.toLocaleDateString(undefined, options);
+
+      const timeUntilNextBirthday = nextBirthday - currentDate;
+      const daysUntilNextBirthday = Math.ceil(timeUntilNextBirthday / (1000 * 3600 * 24));
+
+      document.getElementById("nextBirthday").innerHTML = `
+        🎉 Your next birthday is on <b>${birthdayString}</b><br>
+        ⏳ Only <b>${daysUntilNextBirthday}</b> days left!
+      `;
+    }
+  </script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
