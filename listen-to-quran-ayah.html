@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Listen Quran Ayah</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-100 to-white min-h-screen text-gray-800">
+
+  <!-- Header -->
+  <header class="text-center py-10 bg-blue-700 text-white shadow-lg">
+    <h1 class="text-4xl font-bold">📖 Listen to Quran Ayah</h1>
+    <p class="text-md mt-2">Explore and reflect upon the words of Allah</p>
+  </header>
+
+  <!-- Main Player Card -->
+  <section class="max-w-3xl mx-auto px-4 py-10">
+    <div class="bg-white shadow-xl rounded-2xl p-6 animate-fade-in">
+      <h2 class="text-2xl font-bold text-center text-blue-700 mb-6">🔊 Play Any Ayah</h2>
+
+      <form id="quranForm" class="space-y-4">
+        <div>
+          <label for="surah" class="block font-medium">Surah Number (1 - 114):</label>
+          <input type="number" id="surah" min="1" max="114" placeholder="e.g. 2"
+            class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition" required />
+        </div>
+
+        <div>
+          <label for="ayah" class="block font-medium">Ayah Number:</label>
+          <input type="number" id="ayah" min="1" max="286" placeholder="e.g. 255"
+            class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition" required />
+        </div>
+
+        <button type="submit"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 transform hover:scale-105">
+          🔍 Listen
+        </button>
+      </form>
+
+      <div id="audioPlayer" class="mt-6 hidden animate-fade-in">
+        <audio controls id="quranAudio" class="w-full mt-4 rounded-md"></audio>
+      </div>
+
+      <div id="ayahText" class="mt-6 hidden text-center text-lg text-gray-700 italic animate-fade-in"></div>
+    </div>
+  </section>
+
+  <!-- Surah Info Section -->
+  <section class="max-w-3xl mx-auto px-4 py-10">
+    <div class="bg-white shadow-lg rounded-xl p-6">
+      <h2 class="text-xl font-bold text-blue-700 mb-4">📘 Surah Info</h2>
+      <div id="surahInfo" class="text-gray-700 space-y-2 text-sm">
+        <p>Loading surah info...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Quran Section -->
+  <section class="bg-white py-12 mt-10 border-t">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <h2 class="text-2xl font-bold text-blue-700 mb-4">About The Holy Quran</h2>
+      <p class="text-gray-700 leading-relaxed text-md">
+        The Quran is the final and complete revelation from Allah, a guide for humanity revealed to Prophet Muhammad ﷺ over 23 years.
+        It contains timeless wisdom, laws, stories of past nations, and spiritual insights. Listening to and reflecting on the Quran
+        brings peace to the heart and guidance to the soul.
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-blue-700 text-white text-center py-6 mt-12">
+    <p class="text-sm">© 2025 Hasan Tools | Listen Quran Ayah </p>
+  </footer>
+
+  <!-- Animations -->
+  <style>
+    @keyframes fade-in {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fade-in 0.6s ease-out forwards;
+    }
+  </style>
+
+  <!-- Script for Ayah + API -->
+  <script>
+    const form = document.getElementById('quranForm');
+    const audio = document.getElementById('quranAudio');
+    const audioContainer = document.getElementById('audioPlayer');
+    const ayahText = document.getElementById('ayahText');
+    const surahInfo = document.getElementById('surahInfo');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const surahNum = document.getElementById('surah').value;
+      const ayahNum = document.getElementById('ayah').value;
+
+      const surahStr = String(surahNum).padStart(3, '0');
+      const ayahStr = String(ayahNum).padStart(3, '0');
+      const audioUrl = `https://www.hadithbd.com/audio/${surahStr}${ayahStr}.mp3`;
+
+      // Set audio
+      audio.src = audioUrl;
+      audioContainer.classList.remove('hidden');
+
+      // Get Ayah Text & Surah Info
+      try {
+        const res = await fetch(`https://api.alquran.cloud/v1/ayah/${surahNum}:${ayahNum}/en.asad`);
+        const data = await res.json();
+        if (data.code === 200) {
+          const ayah = data.data.text;
+          const surah = data.data.surah;
+          ayahText.textContent = `"${ayah}"`;
+          ayahText.classList.remove('hidden');
+
+          // Surah Info
+          surahInfo.innerHTML = `
+            <p><strong>Name:</strong> ${surah.englishName} (${surah.englishNameTranslation})</p>
+            <p><strong>Arabic:</strong> ${surah.name}</p>
+            <p><strong>Revelation Type:</strong> ${surah.revelationType}</p>
+            <p><strong>Total Ayahs:</strong> ${surah.numberOfAyahs}</p>
+          `;
+        } else {
+          ayahText.textContent = "Ayah not found.";
+          ayahText.classList.remove('hidden');
+        }
+      } catch (err) {
+        console.error("API Error", err);
+        ayahText.textContent = "Failed to load ayah.";
+        ayahText.classList.remove('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
