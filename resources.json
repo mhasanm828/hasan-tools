@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "title": "Financial Management",
+    "course": "Financial Management (Code: 232305)",
+    "url": "https://example.com/fm.pdf",
+    "image": "https://via.placeholder.com/300x200?text=Finance",
+    "timestamp": "2025-05-05 15:30"
+  },
+  {
+    "id": 2,
+    "title": "Macro Economics",
+    "course": "Macro Economics (Code: 232313)",
+    "url": "https://example.com/macro.pdf",
+    "image": "https://via.placeholder.com/300x200?text=Macro",
+    "timestamp": "2025-05-05 16:00"
+  }
+]
